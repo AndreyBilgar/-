@@ -1,0 +1,8 @@
+# CAD source and per-part dumps are not published (public repository)
+*.stp
+*.step
+cad/parts.json
+cad/slices.json
+cad/tess.npy
+__pycache__/
+*.pyc
