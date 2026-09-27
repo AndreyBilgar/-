@@ -29,7 +29,7 @@ def model(tt):
     return a0+a1*tau+a2*tau**2+A*np.exp(-al*tau)*np.cos(w*tau+ph), a0+a1*tau+a2*tau**2
 fig,ax=plt.subplots(1,2,figsize=(W,2.6),gridspec_kw=dict(width_ratios=[1.6,1]))
 s=(tu>=45)
-ax[0].plot(tu[s],xu[s],color=INK,lw=1.0,label='эксперимент (оцифровка рис. 4)')
+ax[0].plot(tu[s],xu[s],color=INK,lw=1.0,label='эксперимент (рис. 4)')
 tt=np.linspace(72,198,800); xm,xd=model(tt)
 ax[0].plot(tt,xm,color=C[1],lw=1.2,ls='--',label='модель (1)–(2)')
 ax[0].plot(tt,xd,color=C[0],lw=1.0,label='дрейф $x_d(t)$')
