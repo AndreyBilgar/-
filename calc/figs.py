@@ -29,9 +29,9 @@ def model(tt):
     return a0+a1*tau+a2*tau**2+A*np.exp(-al*tau)*np.cos(w*tau+ph), a0+a1*tau+a2*tau**2
 fig,ax=plt.subplots(1,2,figsize=(W,2.6),gridspec_kw=dict(width_ratios=[1.6,1]))
 s=(tu>=45)
-ax[0].plot(tu[s],xu[s],color=INK,lw=1.0,label='эксперимент (рис. 4)')
+ax[0].plot(tu[s],xu[s],color=INK,lw=1.0,label='эксперимент')
 tt=np.linspace(72,198,800); xm,xd=model(tt)
-ax[0].plot(tt,xm,color=C[1],lw=1.2,ls='--',label='модель (1)–(2)')
+ax[0].plot(tt,xm,color=C[1],lw=1.2,ls='--',label='модель «дрейф + форма»')
 ax[0].plot(tt,xd,color=C[0],lw=1.0,label='дрейф $x_d(t)$')
 ax[0].set_xlabel('t, мс'); ax[0].set_ylabel('$X_{ФК}$, мм'); ax[0].legend(loc='upper right',frameon=False); ax[0].set_xlim(45,200); lab(ax[0],'а')
 lbl=[67.13,71.43,80.48,88.35,96.62,103.96,112.78,119.51,128.52,135.00,143.73,151.08,159.41,166.17,174.92,181.61,189.66,196.71]
@@ -40,30 +40,30 @@ ax[1].plot(np.arange(1,len(up)+1),up,'o-',color=C[0],ms=4,label='рост (min�
 ax[1].plot(np.arange(1,len(dn)+1),dn,'s-',color=C[1],ms=4,label='спад (max→min)')
 T=2*np.pi/p[5]*1e3; dT=1.503
 ax[1].axhline(T/2-dT/2,color=C[0],ls=':',lw=1); ax[1].axhline(T/2+dT/2,color=C[1],ls=':',lw=1)
-ax[1].text(4.6,9.35,'прогноз по (5)',fontsize=7.5,color=C[1]); ax[1].text(5.6,6.05,'прогноз по (5)',fontsize=7.5,color=C[0])
+ax[1].text(4.6,9.35,'прогноз (дрейф)',fontsize=7.5,color=C[1]); ax[1].text(5.6,6.05,'прогноз (дрейф)',fontsize=7.5,color=C[0])
 ax[1].set_xlabel('номер полуцикла'); ax[1].set_ylabel('длительность, мс'); ax[1].legend(frameon=False,loc='lower right'); ax[1].set_ylim(3.5,10); lab(ax[1],'б')
 plt.tight_layout(); plt.savefig(F+'fig_exp_proc.png'); plt.close()
-# ---------- Fig: mass/stiffness distribution and mode shapes
-MP=json.load(open('modes_phys.json')); zn=np.array(MP['zn']); m=np.array(MP['m']); ke=np.array(MP['ke'])
-dz=zn[1]-zn[0]; zc=0.5*(zn[1:]+zn[:-1])
-fig,ax=plt.subplots(3,1,figsize=(W,4.5),sharex=True,gridspec_kw=dict(height_ratios=[0.75,0.75,1.3]))
-ax[0].step(zn,m/dz/1e3,where='mid',color=C[0],lw=1.0); ax[0].set_ylabel("$m'(z)$, т/м"); lab(ax[0],'а')
-EA=ke*dz/1e9
-ax[1].step(zc,EA,where='mid',color=C[1],lw=1.0); ax[1].set_ylabel('$EA(z)$, ГН'); lab(ax[1],'б')
+# ---------- Fig: mode shapes in relative coordinate with section schematic (no dimensions)
+MP=json.load(open('modes_phys.json')); zn=np.array(MP['zn'])
+L0,L1=zn[0],zn[-1]; xi=lambda z:(np.asarray(z)-L0)/(L1-L0)
 V=np.array(MP['V']); w=np.array(MP['w'])
+fig,ax=plt.subplots(2,1,figsize=(W,3.3),sharex=True,gridspec_kw=dict(height_ratios=[0.22,1]))
+J={'ЗК–ПС1':3.645,'ПС1–ПС2':8.878,'ПС2–ПС3':14.372,'ПС3–ФК':19.604,'ФК–БТ1':21.906,'БТ1–БТ2':27.131}
+bounds=[L0]+list(J.values())+[L1]; names=['ЗК','ПС1','ПС2','ПС3','ФК','БТ1','БТ2']
+for i,nm in enumerate(names):
+    x0,x1=xi(bounds[i]),xi(bounds[i+1])
+    ax[0].add_patch(plt.Rectangle((x0,0.15),x1-x0,0.7,fc='#e6e6e6',ec=INK2,lw=0.6))
+    ax[0].text((x0+x1)/2,0.5,nm,ha='center',va='center',fontsize=8)
+ax[0].set_ylim(0,1); ax[0].axis('off')
 for k,cc in ((1,C[0]),(2,C[1])):
-    ph=V[k]/np.max(np.abs(V[k])); ax[2].plot(zn,ph,color=cc,label='форма %d, f = %s Гц'%(k,('%.1f'%(w[k]/2/np.pi)).replace('.',',')))
-ax[2].axhline(0,color=INK2,lw=0.6)
+    ph=V[k]/np.max(np.abs(V[k])); ax[1].plot(xi(zn),ph,color=cc,label='форма %d, f = %s Гц'%(k,('%.1f'%(w[k]/2/np.pi)).replace('.',',')))
+ax[1].axhline(0,color=INK2,lw=0.6)
 st=MP['st']
 for kk,z in st.items():
-    ax[2].plot([z],[np.interp(z,zn,V[1]/np.max(np.abs(V[1])))],'o',color=C[7],ms=5,zorder=5); ax[2].text(z,-1.33,kk,ha='center',fontsize=8,color=INK)
-J={'ЗК–ПС1':3.645,'ПС1–ПС2':8.878,'ПС2–ПС3':14.372,'ПС3–ФК':19.604,'ФК–БТ1':21.906,'БТ1–БТ2':27.131}
-for kk,z in J.items():
-    for a in ax: a.axvline(z,color='#9a9a9a',lw=0.6,ls='--')
-ax[2].text(19.75,-0.9,'стык\nПС3–ФК',fontsize=7.5,color=INK2)
-ax[2].set_ylim(-1.45,1.25); ax[2].set_xlabel('z, м'); ax[2].set_ylabel('$\\varphi_k(z)$ (норм.)'); ax[2].legend(frameon=False,loc='upper left'); lab(ax[2],'в')
-ax[2].set_xlim(0.5,33)
-plt.tight_layout(); plt.savefig(F+'fig_modes.png'); plt.close()
+    ax[1].plot([xi(z)],[np.interp(z,zn,V[1]/np.max(np.abs(V[1])))],'o',color=C[7],ms=5,zorder=5); ax[1].text(xi(z),-1.33,kk,ha='center',fontsize=8,color=INK)
+for kk,z in J.items(): ax[1].axvline(xi(z),color='#9a9a9a',lw=0.6,ls='--')
+ax[1].set_ylim(-1.45,1.25); ax[1].set_xlim(0,1); ax[1].set_xlabel('ξ = z/L'); ax[1].set_ylabel('$\\varphi_k$ (норм.)'); ax[1].legend(frameon=False,loc='upper left')
+plt.tight_layout(h_pad=0.2); plt.savefig(F+'fig_modes.png'); plt.close()
 # ---------- Fig: identification
 TH=json.load(open('timehist.json')); ID=json.load(open('ident_phys.json')); pp=ID['p']
 from sim import Model
@@ -72,12 +72,12 @@ def pulse(t,t0,tau):
 b=TH['base']; t=np.array(b['t'])*1e3
 fig,ax=plt.subplots(3,1,figsize=(W,4.7),sharex=True,gridspec_kw=dict(height_ratios=[1.5,1,1]))
 ax[0].plot(tu,xu,color=INK,lw=1.0,label='эксперимент')
-ax[0].plot(t,np.array(b['X'])*1e3,color=C[1],ls='--',lw=1.2,label='КЭ-модель с нагрузками (12)')
+ax[0].plot(t,np.array(b['X'])*1e3,color=C[1],ls='--',lw=1.2,label='КЭ-модель с идентифицированными нагрузками')
 ax[0].plot(t,np.array(b['xcm'])*1e3,color=C[0],lw=1.0,label='центр масс (модель)')
 ax[0].set_ylabel('перемещение, мм'); ax[0].set_ylim(-26,2); ax[0].legend(frameon=False,loc='lower left'); lab(ax[0],'а')
 tt=np.linspace(40,200,2000)
-ax[1].plot(tt,pp[0]*pulse(tt,pp[1],pp[2]),color=C[0],label='$P(t)$ — казённая часть, z = 1,28 м')
-ax[1].plot(tt,pp[3]*pulse(tt,pp[4],pp[5]),color=C[1],label='$Q(t)$ — форкамера, z = 21,3 м')
+ax[1].plot(tt,pp[0]*pulse(tt,pp[1],pp[2]),color=C[0],label='$P(t)$ — казённая часть')
+ax[1].plot(tt,pp[3]*pulse(tt,pp[4],pp[5]),color=C[1],label='$Q(t)$ — форкамера')
 ax[1].axvline(48.9,color=INK2,lw=0.7,ls=':'); ax[1].text(35.2,2.25,'D1 = 48,9 мс',fontsize=7.5,color=INK2)
 ax[1].axvline(70.07,color=INK2,lw=0.7,ls=':'); ax[1].text(71.0,2.25,'вылет 70,07 мс',fontsize=7.5,color=INK2)
 ax[1].set_ylabel('сила, МН'); ax[1].legend(frameon=False,loc='upper right'); ax[1].set_ylim(0,2.7); lab(ax[1],'б')
@@ -87,7 +87,7 @@ plt.tight_layout(); plt.savefig(F+'fig_ident.png'); plt.close()
 # ---------- Fig: disc spring & brake characteristic
 S=json.load(open('spring.json')); s=np.array(S['s']); Fs=np.array(S['F'])
 fig,ax=plt.subplots(1,2,figsize=(W,2.6))
-ax[0].plot(s,Fs/1e3,color=C[0],label='формула (14)')
+ax[0].plot(s,Fs/1e3,color=C[0],label='формула Альмена–Ласло')
 ax[0].plot(s,34.05*s,color=INK2,ls=':',lw=1,label='линейное приближение')
 ax[0].axvline(0.35,color=C[7],lw=0.7,ls='--'); ax[0].text(0.36,2,'$s=0{,}5h_0$',fontsize=7.5,color=INK2)
 ax[0].set_xlabel('прогиб одной пружины s, мм'); ax[0].set_ylabel('F, кН'); ax[0].legend(frameon=False,loc='upper left'); lab(ax[0],'а')
@@ -100,8 +100,8 @@ plt.tight_layout(); plt.savefig(F+'fig_spring.png'); plt.close()
 # ---------- Fig: friction efficiency
 r=np.linspace(0,1,300)
 fig,ax=plt.subplots(1,2,figsize=(W,2.5),gridspec_kw=dict(width_ratios=[1.2,1]))
-ax[0].plot(r,2/np.pi*np.arcsin(r),color=C[0],label='η(r) — торможение отката (18)')
-ax[0].plot(r,np.sqrt(1-r**2),color=C[1],label='κ(r) — гашение колебаний (19)')
+ax[0].plot(r,2/np.pi*np.arcsin(r),color=C[0],label='η(r) — торможение отката')
+ax[0].plot(r,np.sqrt(1-r**2),color=C[1],label='κ(r) — гашение колебаний')
 ax[0].set_xlabel('r = $V_d/(\\omega A_j)$'); ax[0].set_ylabel('доля от $F_j$'); ax[0].legend(frameon=False,loc='center left'); lab(ax[0],'а')
 LY=json.load(open('layouts.json')); amp=LY['amp']
 ks=list(amp.keys()); vals=[abs(amp[k]) for k in ks]

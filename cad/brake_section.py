@@ -40,9 +40,8 @@ for path,nm,shp in parts:
                 ax.add_patch(Polygon(P[[a-1,b_-1,c-1]],closed=True,fc=colr(nm),ec=colr(nm),lw=0.2))
         ex.Next()
 ax.set_xlim(290,440); ax.set_ylim(95,262); ax.set_aspect('equal')
-ax.set_xlabel('x, мм'); ax.set_ylabel('y, мм')
-ann=[('головка\nрельса Р65',(362,160),(292,108)),('фрикционная\nпластина',(375,181),(408,165)),('пакет из 6\nтарельчатых\nпружин',(372,205),(405,238)),
+ax.axis('off')
+ann=[('головка\nрельса',(362,160),(292,108)),('фрикционная\nпластина',(375,181),(408,165)),('пакет из 6\nтарельчатых\nпружин',(372,205),(405,238)),
      ('захват',(405,140),(415,115)),('корпус',(330,215),(292,242)),('шток,\nгайка',(362,186),(292,195))]
 for t,xy,xyt in ann: ax.annotate(t,xy,xyt,fontsize=10,arrowprops=dict(arrowstyle='->',lw=0.8))
-ax.grid(alpha=0.3)
 plt.tight_layout(); plt.savefig('../figures/fig_brake_section.png',dpi=200); print('ok')
