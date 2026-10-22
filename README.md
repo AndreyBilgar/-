@@ -11,9 +11,9 @@
 | `calc/` | расчётные скрипты (Python: numpy/scipy/matplotlib) и результаты (`*.json`, `fe_data.npz`) |
 | `cad/` | скрипты анализа STEP-модели (OpenCASCADE, пакет `cadquery-ocp`): массы, сечения A(z), геометрия тормоза, визуализация |
 | `figures/` | рисунки статьи; `figures/src/` — экспериментальные материалы (фото установки, кадр съёмки, кривая опыта 1) |
-| `doc_build/` | сборка docx: конвертер LaTeX → OMML (`omml.py`), вёрстка (`build_lib.py`), текст статьи (`article.py`), журнальная версия (`journal.py`) |
-| `article/journal/` | рукопись для «Известий вузов. Машиностроение» (docx + PDF-контроль) и `CHECKLIST.md`: требования журнала, внесённые изменения, что заполнить до подачи |
-| `article/source/` | авторская версия статьи — мастер-текст для журнальной рукописи |
+| `doc_build/` | сборка docx: конвертер LaTeX → OMML (`omml.py`), вёрстка (`build_lib.py`), текст статьи (`article.py`), журнальная версия: оформление по регламенту (`journal.py`) и версия на 20 страниц из авторской правки v5 (`journal_v5.py`) |
+| `article/journal/` | рукопись для «Известий вузов. Машиностроение» на 20 страниц (docx + PDF-контроль), `submission/` — состав архива для подачи, `CHECKLIST.md` — что сокращено и что заполнить до подачи |
+| `article/source/` | авторские версии статьи (v4, v5) — мастер-тексты для журнальной рукописи |
 
 ## Ключевые результаты
 
@@ -44,7 +44,7 @@ cd ../calc && python3 fit_exp.py && python3 identify_phys.py && python3 layouts.
 # 3) статья
 cd ../doc_build && python3 article.py
 # 4) журнальная версия (7 сводных рисунков + рукопись по требованиям журнала)
-cd ../calc && python3 figs_journal.py && cd ../doc_build && python3 journal.py
+cd ../calc && python3 figs_journal.py && cd ../doc_build && python3 journal_v5.py
 ```
 
 Прямая модель: `calc/sim.py` (явная схема, элементы Дженкинса для тормозов, контроль энергобаланса ≤ 5·10⁻⁴).

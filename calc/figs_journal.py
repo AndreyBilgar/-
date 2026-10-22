@@ -50,13 +50,28 @@ fig.legend(*axs[0].get_legend_handles_labels(),loc='upper center',ncol=4,frameon
 axp=[fig.add_subplot(gs[1,0:3]),fig.add_subplot(gs[1,3:6])]
 draw_pareto(axp,labels='гд')
 plt.tight_layout(rect=(0,0,1,0.955),h_pad=1.0); plt.savefig(J+'fig6_layouts.png'); plt.close()
+# ---------- Fig 3 (20-page version): mode shapes + dry friction efficiency (the spring panels repeat table 5)
+fig=plt.figure(figsize=(W,3.0))
+gs=fig.add_gridspec(2,2,height_ratios=[0.22,1],width_ratios=[1.75,1])
+a0=fig.add_subplot(gs[0,0]); a1=fig.add_subplot(gs[1,0]); a2=fig.add_subplot(gs[:,1])
+draw_modes(a0,a1); a1.legend(frameon=False,loc='upper left',fontsize=7)
+a0.text(-0.06,1.05,'а',transform=a0.transAxes,fontsize=10,fontweight='bold',va='bottom')
+draw_eff(a2,label='б',loc='upper center'); a2.set_ylim(0,1.5); a2.set_yticks([0,0.2,0.4,0.6,0.8,1.0]); a2.legend(frameon=False,loc='upper center',fontsize=7)
+plt.tight_layout(h_pad=0.2,w_pad=1.0); plt.savefig(J+'fig3_modes_eff.png'); plt.close()
+# ---------- Fig 6 (short version): brake force scan only; the Pareto panels repeat table 6
+fig,ax=plt.subplots(1,3,figsize=(W,2.75))
+draw_scan(ax,labels='абв')
+fig.legend(*ax[0].get_legend_handles_labels(),loc='upper center',ncol=2,frameon=False,fontsize=7.5,bbox_to_anchor=(0.5,1.0))
+plt.tight_layout(rect=(0,0,1,0.86)); plt.savefig(J+'fig6_scan.png'); plt.close()
 # ---------- Fig 7: time histories (unchanged)
 Image.open(F+'fig_timehist.png').save(J+'fig7_time.png',dpi=(300,300))
 print('journal figures ok')
 # ---------- rule 8: figure files for submission (.tif/.jpg, 300 dpi) and compact copies for the docx (archive <= 5 MB)
 SUB='../article/journal/submission/'
 os.makedirs(SUB,exist_ok=True)
-NAMES=['fig1_object','fig2_test1','fig3_modes','fig4_ident','fig5_brake_eff','fig6_layouts','fig7_time']
+for f_ in os.listdir(SUB):
+    if f_.startswith('Рисунок_'): os.remove(SUB+f_)
+NAMES=['fig1_object','fig2_test1','fig3_modes_eff','fig4_ident','fig6_scan']   # 20-page version: 5 figures
 for k,nm in enumerate(NAMES,1):
     im=Image.open(J+nm+'.png').convert('RGB')
     if k==1:   # photographs and a render: JPEG
