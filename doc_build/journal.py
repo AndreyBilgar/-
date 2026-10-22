@@ -172,9 +172,14 @@ last=els[169]
 # ---------------------------------------------------------------- authors (RU)
 a=After(last)
 a('Сведения об авторах',align='left',indent=False,bold=True,before=10,after=4,keep_next=True)
-AUTH_RU=[('Балябин','А.И.','1'),('Воронов','С.А.','2'),('Герасимов','С.И.','1, 3'),('Заузолков','М.В.','1'),('Ломтева','Е.Е.','1')]
-for fam,ini,aff in AUTH_RU:
-    a('**%s %s** [[(имя и отчество полностью)]] — [[ученая степень, должность, подразделение]], организация %s; e-mail: [[…]]; SPIN-код РИНЦ: [[…]]; ORCID: [[…]]; Scopus Author ID: [[…]]; Web of Science ResearcherID: [[…]].'%(fam,ini,aff),align='left',size=SMALL,line=1.15,after=2)
+# author data as given by the authors; e-mail, ORCID and the other identifiers are filled in by the authors themselves
+IDS_RU='e-mail: [[…]]; ORCID: [[…]]; SPIN-код РИНЦ: [[…]]; Scopus Author ID: [[…]]; Web of Science ResearcherID: [[…]].'
+AUTH_RU=['**Балябин А.И.** [[(имя и отчество полностью)]] — инженер-исследователь ФГУП «РФЯЦ-ВНИИЭФ», преподаватель СарФТИ НИЯУ МИФИ',
+         '**Воронов Сергей Алексеевич** — д-р техн. наук, доцент, профессор НИЯУ МИФИ',
+         '**Герасимов Сергей Иванович** — д-р физ.-мат. наук, профессор, начальник отдела ФГУП «РФЯЦ-ВНИИЭФ», профессор СарФТИ НИЯУ МИФИ, главный научный сотрудник ИПФ РАН',
+         '**Заузолков Михаил Валерьевич** — старший научный сотрудник, преподаватель СарФТИ НИЯУ МИФИ',
+         '**Ломтева Екатерина Евгеньевна** — старший преподаватель СарФТИ НИЯУ МИФИ']
+for t in AUTH_RU: a(t+'; '+IDS_RU,align='left',size=SMALL,line=1.15,after=2)
 # ---------------------------------------------------------------- English part
 a.brk()
 a('INFLUENCE OF ADJUSTABLE FRICTION BRAKES ON THE KINEMATICS OF A LIGHT-GAS GUN',align='center',indent=False,bold=True,after=4,line=1.0)
@@ -221,8 +226,13 @@ REFS_EN=[
  'Vibratsii v tekhnike. Spravochnik. V 6 t. [Vibrations in engineering. Handbook. In 6 vols.]. Chelomey V.N., ed. Moscow, Mashinostroenie Publ., 1978–1981. (In Russ.)']
 for k,t in enumerate(REFS_EN,1): a('%d. %s'%(k,t),size=SMALL,line=1.15,indent=False,after=1)
 a('Information about the authors',align='left',indent=False,bold=True,before=10,after=4,keep_next=True)
-AUTH_EN=[('Balyabin A.I.','1'),('Voronov S.A.','2'),('Gerasimov S.I.','1, 3'),('Zauzolkov M.V.','1'),('Lomteva E.E.','1')]
-for nm,aff in AUTH_EN:
-    a('**%s** [[(full first name and patronymic)]] — [[academic degree, position, department]], affiliation %s; e-mail: [[…]]; ORCID: [[…]]; Scopus Author ID: [[…]]; Web of Science ResearcherID: [[…]].'%(nm,aff),align='left',size=SMALL,line=1.15,after=2)
+IDS_EN='e-mail: [[…]]; ORCID: [[…]]; SPIN-code (RSCI): [[…]]; Scopus Author ID: [[…]]; Web of Science ResearcherID: [[…]].'
+SAR='Sarov Physics and Technology Institute — Branch of the National Research Nuclear University MEPhI'
+AUTH_EN=['**Balyabin A.I.** [[(full first name and patronymic)]] — Research Engineer, Russian Federal Nuclear Center — All-Russian Research Institute of Experimental Physics (RFNC-VNIIEF); Lecturer, '+SAR,
+         '**Voronov Sergey Alekseevich** — Dr. Sc. (Eng.), Associate Professor, Professor, National Research Nuclear University MEPhI',
+         '**Gerasimov Sergey Ivanovich** — Dr. Sc. (Phys.-Math.), Professor, Head of Department, RFNC-VNIIEF; Professor, '+SAR+'; Chief Researcher, A.V. Gaponov-Grekhov Institute of Applied Physics of the Russian Academy of Sciences',
+         '**Zauzolkov Mikhail Valerievich** — Senior Researcher, Lecturer, '+SAR,
+         '**Lomteva Ekaterina Evgenievna** — Senior Lecturer, '+SAR]
+for t in AUTH_EN: a(t+'; '+IDS_EN,align='left',size=SMALL,line=1.15,after=2)
 os.makedirs(os.path.dirname(OUT),exist_ok=True)
 d.save(OUT); print('saved',OUT)
