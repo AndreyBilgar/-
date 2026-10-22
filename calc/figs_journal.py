@@ -53,3 +53,15 @@ plt.tight_layout(rect=(0,0,1,0.955),h_pad=1.0); plt.savefig(J+'fig6_layouts.png'
 # ---------- Fig 7: time histories (unchanged)
 Image.open(F+'fig_timehist.png').save(J+'fig7_time.png',dpi=(300,300))
 print('journal figures ok')
+# ---------- rule 8: figure files for submission (.tif/.jpg, 300 dpi) and compact copies for the docx (archive <= 5 MB)
+SUB='../article/journal/submission/'
+os.makedirs(SUB,exist_ok=True)
+NAMES=['fig1_object','fig2_test1','fig3_modes','fig4_ident','fig5_brake_eff','fig6_layouts','fig7_time']
+for k,nm in enumerate(NAMES,1):
+    im=Image.open(J+nm+'.png').convert('RGB')
+    if k==1:   # photographs and a render: JPEG
+        im.save(SUB+'Рисунок_%d.jpg'%k,quality=92,subsampling=0,dpi=(300,300)); im.save(J+nm+'_doc.jpg',quality=92,subsampling=0,dpi=(300,300))
+    else:      # line art: 256-colour palette, lossless LZW TIFF
+        q=im.quantize(colors=256,method=Image.Quantize.MEDIANCUT,dither=Image.Dither.NONE)
+        q.save(SUB+'Рисунок_%d.tif'%k,compression='tiff_lzw',dpi=(300,300)); q.save(J+nm+'_doc.png',optimize=True,dpi=(300,300))
+print('submission figures ok')

@@ -41,7 +41,7 @@ def draw_exp_proc(a0,a1,labels='аб'):
     tt=np.linspace(72,198,800); xm,xd=model(tt)
     a0.plot(tt,xm,color=C[1],lw=1.2,ls='--',label='модель «дрейф + форма»')
     a0.plot(tt,xd,color=C[0],lw=1.0,label='дрейф $x_d(t)$')
-    a0.set_xlabel('t, мс'); a0.set_ylabel('$X_{ФК}$, мм'); a0.legend(loc='upper right',frameon=False); a0.set_xlim(45,200); lab(a0,labels[0])
+    a0.set_xlabel('t, мс'); a0.set_ylabel('$X_{\\mathrm{ФК}}$, мм'); a0.legend(loc='upper right',frameon=False); a0.set_xlim(45,200); lab(a0,labels[0])
     lbl=[67.13,71.43,80.48,88.35,96.62,103.96,112.78,119.51,128.52,135.00,143.73,151.08,159.41,166.17,174.92,181.61,189.66,196.71]
     L=np.array(lbl); d=np.diff(L); up=d[0::2]; dn=d[1::2]
     a1.plot(np.arange(1,len(up)+1),up,'o-',color=C[0],ms=4,label='рост (min→max)')
@@ -68,7 +68,7 @@ def draw_modes(a0,a1):
     for kk,z in MP['st'].items():
         a1.plot([xi(z)],[np.interp(z,zn,V[1]/np.max(np.abs(V[1])))],'o',color=C[7],ms=5,zorder=5); a1.text(xi(z),-1.33,kk,ha='center',fontsize=8,color=INK)
     for kk,z in J.items(): a1.axvline(xi(z),color='#9a9a9a',lw=0.6,ls='--')
-    a1.set_ylim(-1.45,1.25); a1.set_xlim(0,1); a1.set_xlabel('ξ = z/L'); a1.set_ylabel('$\\varphi_k$ (норм.)'); a1.legend(frameon=False,loc='upper left')
+    a1.set_ylim(-1.45,1.25); a1.set_xlim(0,1); a1.set_xlabel('ξ = z/L'); a1.set_ylabel('$\\mathrm{\\varphi}_k$ (норм.)'); a1.legend(frameon=False,loc='upper left')
 # ---------- panels: identification
 def pulse(t,t0,tau):
     s=(t-t0)/tau; return np.where((s>0)&(s<1),np.sin(np.pi*s)**2,0)
@@ -85,17 +85,17 @@ def draw_ident(a0,a1,a2,labels='абв'):
     a1.axvline(70.07,color=INK2,lw=0.7,ls=':'); a1.text(71.0,2.25,'вылет 70,07 мс',fontsize=7.5,color=INK2)
     a1.set_ylabel('сила, МН'); a1.legend(frameon=False,loc='upper right'); a1.set_ylim(0,2.7); lab(a1,labels[1])
     a2.plot(t,np.array(b['vcm']),color=C[2]); a2.axhline(0,color=INK2,lw=0.6)
-    a2.set_ylabel('$v_{цм}$, м/с'); a2.set_xlabel('t, мс'); a2.set_xlim(30,200); lab(a2,labels[2])
+    a2.set_ylabel('$v_{\\mathrm{цм}}$, м/с'); a2.set_xlabel('t, мс'); a2.set_xlim(30,200); lab(a2,labels[2])
 # ---------- panels: disc spring & brake characteristic
 def draw_spring(a0,a1,labels='аб',compact=False):
     s=np.array(S['s']); Fs=np.array(S['F'])
-    a0.plot(s,Fs/1e3,color=C[0],label='формула Альмена–Ласло')
+    a0.plot(s,Fs/1e3,color=C[0],label='формула Альмена — Ласло')
     a0.plot(s,34.05*s,color=INK2,ls=':',lw=1,label='линейное приближение')
     a0.axvline(0.35,color=C[7],lw=0.7,ls='--'); a0.text(0.36,2,'$s=0{,}5h_0$',fontsize=7.5,color=INK2)
     a0.set_xlabel('прогиб одной пружины s, мм'); a0.set_ylabel('F, кН'); a0.legend(frameon=False,loc='upper left'); lab(a0,labels[0])
     Dl=6*s; Nb=3*Fs/1e3
     a1.plot(Dl,Nb,color=C[0],label='нормальная сила $N$ на тормоз')
-    a1.fill_between(Dl,0.3*Nb,0.8*Nb,color=C[1],alpha=0.25,lw=0,label='сила трения $\\mu_\\Sigma N$, $\\mu_\\Sigma$=0,3…0,8')
+    a1.fill_between(Dl,0.3*Nb,0.8*Nb,color=C[1],alpha=0.25,lw=0,label='сила трения $\\mathrm{\\mu}_\\Sigma N$, $\\mathrm{\\mu}_\\Sigma$=0,3…0,8')
     a1.axvline(2.1,color=C[7],lw=0.7,ls='--'); a1.axhspan(3.0,3.7,color=C[2],alpha=0.35,lw=0)
     if compact: a1.text(2.9,6.0,'опыты 2–3',fontsize=7,color=INK)
     else: a1.text(2.25,6.0,'уровень опытов 2–3\n(3,0…3,7 кН на тормоз)',fontsize=7.5,color=INK)
@@ -105,12 +105,12 @@ def draw_eff(a0,label='а',loc='center left'):
     r=np.linspace(0,1,300)
     a0.plot(r,2/np.pi*np.arcsin(r),color=C[0],label='η(r) — торможение отката')
     a0.plot(r,np.sqrt(1-r**2),color=C[1],label='κ(r) — гашение колебаний')
-    a0.set_xlabel('r = $V_d/(\\omega A_j)$'); a0.set_ylabel('доля от $F_j$'); a0.legend(frameon=False,loc=loc); lab(a0,label)
+    a0.set_xlabel('r = $V_d/(\\mathrm{\\omega} A_j)$'); a0.set_ylabel('доля от $F_j$'); a0.legend(frameon=False,loc=loc); lab(a0,label)
 def draw_amp(a1,label='б'):
     amp=LY['amp']; ks=list(amp.keys()); vals=[abs(amp[k]) for k in ks]
     a1.bar(ks,vals,color=C[0],width=0.55); a1._cat=True
     for i,v in enumerate(vals): a1.text(i,v+0.03,('%.2f'%v).replace('.',','),ha='center',fontsize=8)
-    a1.set_ylim(0,1.15); a1.set_ylabel('$|\\varphi_1(z_j)|$ (норм.)'); a1.grid(axis='x'); lab(a1,label)
+    a1.set_ylim(0,1.15); a1.set_ylabel('$|\\mathrm{\\varphi}_1(z_j)|$ (норм.)'); a1.grid(axis='x'); lab(a1,label)
 # ---------- panels: recoil vs brake force
 SCAN_NAMES={'uniform':'равномерная 1-1-1-1-1','ends':'концевая S1+S5','node':'узловая S2-S3-S4','opt':'рекомендуемая S1:S2:S3 = 0,48:0,18:0,32'}
 def draw_scan(axs,labels='абв'):
@@ -122,7 +122,7 @@ def draw_scan(axs,labels='абв'):
         axs[2].plot(F_,[x['A170'] for x in d],'o-',ms=3,color=cols[k])
     for y,t_ in ((23,'оп. 1'),(18,'оп. 2'),(17,'оп. 3')):
         axs[0].axhline(y,color=INK2,lw=0.6,ls=':'); axs[0].text(203,y,t_,fontsize=7,va='center',color=INK2)
-    axs[0].set_ylabel('$X_{ФК,max}$ (0–200 мс), мм'); axs[1].set_ylabel('полный откат, мм'); axs[2].set_ylabel('амплитуда при 170–200 мс, мм')
+    axs[0].set_ylabel('$X_{\\mathrm{ФК},\\max}$ (0–200 мс), мм'); axs[1].set_ylabel('полный откат, мм'); axs[2].set_ylabel('амплитуда при 170–200 мс, мм')
     for a,l in zip(axs,labels): a.set_xlabel('$F_\\Sigma$, кН'); lab(a,l); a.set_xlim(0,200)
     axs[1].set_ylim(0,42); axs[2].set_ylim(0,1.2)
 # ---------- panels: Pareto at 30 and 100 kN
@@ -147,7 +147,7 @@ def draw_time(a0,a1,labels='аб'):
         d=TH[k]; t=np.array(d['t'])*1e3
         a0.plot(t,np.array(d['X'])*1e3,color=cc[k],lw=1.0,label=names2[k])
         s_=t<=200; a1.plot(t[s_],np.array(d['NJ'])[s_]/1e6,color=cc[k],lw=0.9)
-    a0.set_ylabel('$X_{ФК}$, мм'); a0.set_xlabel('t, мс'); a0.legend(frameon=False,loc='upper right',ncol=2); a0.set_xlim(40,600); a0.set_ylim(-43,9); lab(a0,labels[0])
+    a0.set_ylabel('$X_{\\mathrm{ФК}}$, мм'); a0.set_xlabel('t, мс'); a0.legend(frameon=False,loc='upper right',ncol=2); a0.set_xlim(40,600); a0.set_ylim(-43,9); lab(a0,labels[0])
     a1.set_ylabel('$N_J$ (ПС3–ФК), МН'); a1.set_xlabel('t, мс'); a1.set_xlim(40,200); lab(a1,labels[1])
 
 if __name__=='__main__':
