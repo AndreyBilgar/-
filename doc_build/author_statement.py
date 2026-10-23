@@ -1,6 +1,6 @@
 # Авторское заявление for «Известия вузов. Машиностроение», laid out like the journal's form and filled in from the
 # manuscript (title, UDC, authors, organisations, corresponding author). Only signatures are left blank, plus the fields
-# the authors have not given: phone, postal address, and identifiers they do not have.
+# the authors have not given: postal address, and identifiers they do not have.
 import os
 from docx import Document
 from docx.shared import Pt, Cm
@@ -22,7 +22,7 @@ IPF=('Федеральное государственное бюджетное �
      'физики им. А.В. Гапонова-Грехова Российской академии наук» (ИПФ РАН), 603950, г. Нижний Новгород, ул. Ульянова, д. 46')
 AUTHORS=[('Балябин Андрей Игоревич',[SAR]),('Воронов Сергей Алексеевич',[MEPHI]),('Герасимов Сергей Иванович',[SAR,IPF]),
          ('Заузолков Михаил Валерьевич',[SAR]),('Ломтева Екатерина Евгеньевна',[SAR])]   # affiliations as in the manuscript header
-CONTACT='Балябиным Андреем Игоревичем'; EMAIL='andrewbalyabin@yandex.ru'
+CONTACT='Балябиным Андреем Игоревичем'; EMAIL='andrewbalyabin@yandex.ru'; PHONE='8 (999) 796-58-50'
 IDS=[('SPIN-код РИНЦ','—'),('Scopus Author ID','—'),('ORCID','0009-0005-5576-0183'),('Web of Science Researcher ID','—')]   # corresponding author
 DATE='«23» октября 2026 г.'
 
@@ -81,7 +81,7 @@ for k,(name,orgs) in enumerate(AUTHORS,1):
 field('Всю переписку по поводу публикации прошу вести с',CONTACT,before=14)
 p=par(tabs=[(12.0,WD_TAB_ALIGNMENT.LEFT)]); run(p,'\tФИО автора',size=9.5)
 field('e-mail',EMAIL,before=4)
-field('Контактные телефоны','',before=8)
+field('Контактные телефоны',PHONE,before=8)
 field('Почтовый адрес с индексом','',before=8)
 p=par(before=6,tabs=[(W,WD_TAB_ALIGNMENT.RIGHT)]); run(p,'\t',under=True)
 run(par(before=12),DATE)
