@@ -85,4 +85,6 @@ field('Контактные телефоны','',before=8)
 field('Почтовый адрес с индексом','',before=8)
 p=par(before=6,tabs=[(W,WD_TAB_ALIGNMENT.RIGHT)]); run(p,'\t',under=True)
 run(par(before=12),DATE)
+z=d.settings.element.find(qn('w:zoom'))
+if z is not None and z.get(qn('w:percent')) is None: z.set(qn('w:percent'),'100')   # required by the schema
 d.save(OUT); print('saved',OUT)
